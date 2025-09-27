@@ -1,0 +1,18 @@
+.result-animation {
+    animation: fadeInScale 0.6s ease-out;
+}
+
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.draw-result-card {
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.3);
+}
