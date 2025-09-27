@@ -1,0 +1,35 @@
+﻿@page "/"
+
+<PageTitle>PickIt - Tirage au sort</PageTitle>
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="text-center mb-4">
+                <h1 class="display-4 text-primary mb-3">
+                    <i class="bi bi-shuffle"></i> PickIt
+                </h1>
+                <p class="lead text-muted">
+                    Outil de tirage au sort simple et efficace
+                </p>
+            </div>
+
+            <DrawList OnDraw="HandleDraw" />
+            <DrawResult Result="@drawResult" OnClear="ClearResult" />
+        </div>
+    </div>
+</div>
+
+@code {
+    private string? drawResult;
+
+    private void HandleDraw(string result)
+    {
+        drawResult = result;
+    }
+
+    private void ClearResult()
+    {
+        drawResult = null;
+    }
+}

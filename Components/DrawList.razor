@@ -1,0 +1,77 @@
+@using PickIt.Services
+@inject DrawService DrawService
+
+<div class="card">
+	<div class="card-header">
+		<h5 class="card-title mb-0">Liste des éléments</h5>
+	</div>
+	<div class="card-body">
+		<div class="mb-3">
+			<label for="itemsList" class="form-label">
+				Saisissez vos éléments (séparés par des virgules ou des lignes) :
+			</label>
+			<textarea id="itemsList"
+					  class="form-control"
+					  rows="6"
+					  placeholder="Item1,Item2,Item3"
+					  @bind="ItemsInput"
+					  @oninput="OnItemsChanged">
+            </textarea>
+		</div>
+
+		@if (Items.Any())
+		{
+			<div class="mb-3">
+				<h6>Éléments détectés (@Items.Count) :</h6>
+				<div class="d-flex flex-wrap gap-1">
+					@foreach (var item in Items)
+					{
+						<span class="badge bg-secondary">@item</span>
+					}
+				</div>
+			</div>
+		}
+
+		<div class="d-grid">
+			<button class="btn btn-primary btn-lg"
+					disabled="@(!Items.Any())"
+					@onclick="PerformDraw">
+				<i class="bi bi-shuffle"></i> Tirer au sort
+			</button>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter] public EventCallback<string> OnDraw { get; set; }
+
+	private string _itemsInput = string.Empty;
+	private List<string> Items = new();
+
+	public string ItemsInput
+	{
+		get => _itemsInput;
+		set
+		{
+			_itemsInput = value;
+			Items = DrawService.ParseItems(value);
+		}
+	}
+
+	private void OnItemsChanged(ChangeEventArgs e)
+	{
+		ItemsInput = e.Value?.ToString() ?? string.Empty;
+	}
+
+	private async Task PerformDraw()
+	{
+		if (Items.Any())
+		{
+			var result = DrawService.DrawRandom(Items);
+			if (result != null)
+			{
+				await OnDraw.InvokeAsync(result);
+			}
+		}
+	}
+}
