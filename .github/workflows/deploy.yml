@@ -14,10 +14,6 @@ jobs:
       pages: write
       id-token: write
 
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -39,14 +35,8 @@ jobs:
             - name: Add .nojekyll file
               run: touch release/wwwroot/.nojekyll
 
-            - name: Setup Pages
-              uses: actions/configure-pages@v5
-
-            - name: Upload artifact
-              uses: actions/upload-pages-artifact@v3
+            - name: Commit wwwroot to GitHub Pages
+              uses: JamesIves/github-pages-deploy-action@v4
               with:
-                path: release/wwwroot
-
-            - name: Deploy to GitHub Pages
-              id: deployment
-              uses: actions/deploy-pages@v4
+                  branch: gh-pages
+                  folder: release/wwwroot
